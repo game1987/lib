@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>特效</title>
+	<style>
+		body{margin: 0;padding: 0;}
+		#sb{width:800px;height: 250px;margin:100px auto;perspective:800px;}
+		#sb1{width:100px;height:40px;margin:0 auto;text-align: center;background: red; font-size: 15px;line-height: 40px;border-radius: 10px;color: #fff;}
+		#sb img{float: left;width: 100px;height: 50px;}
+	</style>
+</head>
+<body>
+	<div id="sb">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+		<img src="image/1.jpg" alt="">
+	</div>
+	<div id="sb1">
+		<span>特效</span>
+	</div>
+</body>
+<script>
+	window.onload=function(){
+		var btn=document.getElementById('sb1');
+		var imgs=document.querySelectorAll('img');
+		var on=true;
+		btn.onclick=function(){
+			if(!on) return;
+			on=false;
+			var endNum=0;
+			for(var i=0;i<imgs.length;i++){
+				(function(i){
+					setTimeout(function(){
+						montion(imgs[i],'1s',function(){
+							this.style.transform='scale(0)';						
+						},function(){
+							montion(this,'1s',function(){
+								this.style.transform='scale(1)';
+								this.style.opacity='0';
+							},function(){
+								endNum++;
+								if(endNum==imgs.length) toBig();
+							});
+						});
+					},
+					Math.random()*1000);
+				})(i);
+			}
+
+			
+		}
+
+		function montion(obj,time,doFn,callBack){
+			obj.style.transition=time;
+			doFn.call(obj);
+			var called=false;
+			obj.addEventListener('transitionend',function(){
+				if(!called) {
+					callBack&&callBack.call(obj);
+					called=true;
+				}
+				
+			},false);
+		}
+		function toBig(){
+			var allEnd=0;
+			for(var i=0;i<imgs.length;i++){
+				imgs[i].style.transition='';
+				
+				imgs[i].style.transform='rotateY(0deg) translateZ(-'+Math.random()*500+'px)';
+				(function(i){
+					setTimeout(function(){
+						montion(imgs[i],'2s',function(){
+							imgs[i].style.opacity=1;
+							imgs[i].style.transform='rotateY(-360deg) translateZ(0)'
+						},function(){
+							allEnd++;
+							imgs[i].style.transition='';
+							imgs[i].style.transform='';
+							if(allEnd==imgs.length) on=true;
+						})
+					},Math.random()*500);
+				})(i);
+			}
+		}
+	}
+</script>
+</html>
