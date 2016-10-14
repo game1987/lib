@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>register</title>
+<link rel="stylesheet"
+    href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
+    <!-- <script src="http://apps.bdimg.com/libs/angular.js/1.2.5/angular.min.js"></script> -->
+    <!-- 1.2.5 对touched没有良好兼容 所以引用了1.4.6 -->
+<script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
+<script>
+    var app = angular.module('myApp', []);
+
+    app.controller('MainController', function($scope) {
+        $scope.userdata={};
+        $scope.userdata.sex='男';
+        $scope.names1=[];
+        $scope.names2=[];
+        $scope.names3=[];
+        for(var i=1900;i<=2016;i++){
+            $scope.names1.push(i)
+        }
+        for(var i=1;i<=12;i++){
+            $scope.names2.push(i)
+        }
+        for(var i=1;i<=28;i++){
+            $scope.names3.push(i)
+        }
+        $scope.selectAction=function(){
+            $scope.userdata.ri=''
+        }
+        $scope.sex=function(obj){
+           if(obj==1){
+            $scope.userdata.sex='男'
+           }else $scope.userdata.sex='女';
+        }
+        $scope.submitForm=function(){
+            console.log($scope.userdata)
+        }
+
+    });
+</script>
+<style>
+    .right30{width: 25%;margin-right: 1%;display: inline-block;}
+    .error{border: 1px solid #a10}
+</style>
+</head>
+<body onload="document.getElementById('email').focus()">
+    <div class="col-sm-6 col-sm-offset-3" ng-app="myApp"
+        ng-controller="MainController">
+        <h2>用户注册</h2>
+        <form name="myform" ng-submit='submitForm()' novalidate>
+            <div class="control-group">  
+                <label for="sex">  
+                    性别：</label>  
+                <div class="controls" style="margin:-10px 0 0 20px">  
+                    <label class="radio">  
+                        <input type="radio" value="男" name="sex"  ng-click='sex(1)' checked="checked">  
+                        男  
+                    </label>  
+                    <label class="radio">  
+                        <input type="radio" value="女" name="sex" ng-click='sex(2)'>  
+                        女  
+                    </label>  
+                </div>  
+            </div>  
+
+            <div id="email-group">
+                <label for="email">E-mail:</label>
+                <input type="email" name="email" class="form-control" ng-model="userdata.email"  id="email"  ng-class="{'error':myform.email.$invalid && myform.email.$touched}"
+                    ng-pattern='/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/'
+                    placeholder="请输入电子邮箱..." required>
+                <p>
+                    <span style="color: red" ng-show=" myform.email.$invalid">
+                        <span ng-show="myform.email.$error.required">*请输入邮箱</span>
+                        <span ng-show='myform.email.$error.pattern'>*请输入正确的email地址</span>
+                        <!-- <span ng-show="myform.email.$error.email">*请输入正确的email地址</span> ie9不支持--> 
+                    </span>
+                </p>
+            </div>
+
+            <div id="name-group">
+                <label for="name">姓名：</label> <input type="text"
+                    class="form-control"  ng-model="userdata.name" name="name" id="name"
+                    placeholder="请输入昵称..." ng-class="{'error':myform.name.$invalid && 
+                    myform.name.$touched}" required>
+                <p>
+                    <span style="color: red" ng-show="myform.name.$invalid">
+                        <span ng-show="myform.name.$error.required">*请输入姓名</span>
+                    </span>
+                </p>
+            </div>
+
+            <div>
+                <label for="shengri">生日：</label> 
+                <select name="nian" id="" class="form-control right30" ng-model='userdata.nian' ng-change='selectAction()' required>
+                    <option value="" selected="selected">年份</option>
+                    <option value="{{x}}" ng-repeat='x in names1' >{{x}}年</option>
+                </select>
+                <select name="yue" id="" class="form-control right30" ng-model='userdata.yue' ng-change='selectAction()' required>
+                    <option value="">月份</option>
+                    <option value="{{y}}" ng-repeat='y in names2'>{{y}}月</option>
+                </select>
+                <select name="ri" id="" class="form-control right30" ng-model='userdata.ri' required>
+                    <option value="">日期</option>
+                    <option value="{{z}}" ng-repeat='z in names3'>{{z}}日</option>
+                    <option value="29" ng-if='(userdata.yue==2 && userdata.nian%4==0)||userdata.yue!=2'>29日</option>
+                    <option value="30" ng-if='userdata.yue!=2'>30日</option>
+                    <option value="31" ng-if='userdata.yue==1||userdata.yue==3||userdata.yue==5||userdata.yue==7||userdata.yue==8||userdata.yue==10||userdata.yue==12'>31日</option>
+                </select>
+                <p>
+                    <span style="color: red" ng-show='myform.nian.$invalid || myform.yue.$invalid ||myform.ri.$invalid'>
+                        <span >*请输入正确生日</span>
+                    </span>
+                </p>
+            </div>
+
+            <div>
+                <label for="age" >年龄：</label> 
+                <input type="number" ng-model='userdata.age' name="age" 
+                    class="form-control"  ng-pattern='/^([1-9]\d?|100)$/' ng-class="{'error':myform.age.$invalid && myform.age.$touched}" required/>
+                <span style="color: red" ng-show="myform.age.$invalid">
+                        <span ng-show='myform.age.$error.pattern'>*请输入正确年龄</span>
+                        <span ng-show='myform.age.$error.required'>*请输入年龄</span>
+                    </span>
+            </div>
+
+            <div>
+                <label for="tell">电话：</label> <input type="number"
+                    class="form-control" ng-model='userdata.tell' name='tell' ng-minlength="11" ng-maxlength='11' ng-pattern='/^1[34578]\d{9}$/'
+                    placeholder="请输入电话..." ng-class="{'error':myform.tell.$invalid && myform.tell.$touched}" required>
+                 <p>
+                    <span style="color: red" ng-show="myform.tell.$invalid">
+                        <span ng-show='myform.tell.$error.pattern'>*请输入正确电话</span>
+                        <span ng-show='myform.tell.$error.required'>*请输入电话</span>
+                    </span>
+                </p>
+            </div>
+
+            <div>
+                <label for="address">地址：</label> <input type="text"
+                    class="form-control" ng-model="userdata.dizhi" name="dizhi" id="dizhi"
+                    placeholder="请输入昵称..." ng-class="{'error':myform.dizhi.$invalid && myform.dizhi.$touched}" required>
+                <p>
+                    <span style="color: red" ng-show="myform.dizhi.$invalid">
+                        <span ng-show="myform.dizhi.$error.required">*请输入地址</span>
+                    </span>
+                </p>
+            </div>
+
+            <div id="password-group">
+                <label for="password">密码：</label> <input type="password"
+                    class="form-control" ng-model="userdata.password" ng-minlength="6"
+                    ng-maxlength="20" name="password" id="password"
+                    placeholder="请输入密码..." ng-class="{'error':myform.password.$invalid&& myform.password.$touched}" required>
+                <p>
+                    <span style="color: red" ng-show="myform.password.$invalid">
+                        <span ng-show="myform.password.$error.required">*请输入密码</span>
+                        <span ng-show="myform.password.$error.minlength">*密码长度不小于6</span>
+                        <span ng-show="myform.password.$error.maxlength">*密码长度不超过20</span>
+                    </span>
+                </p>
+            </div>
+            
+           <div id="passwordagaingroup">
+                <label for="passwordagain">再输入一遍密码：</label> <input type="password"
+                    class="form-control" ng-model="passwordagain" name="passwordagain"
+                    id="passwordagain" placeholder="请再输一遍密码..." ng-class="{'error':myform.passwordagain.$invalid && myform.passwordagain.$touched}" required>
+                <p>
+                    <span style="color: red" ng-show="myform.password.$valid">
+                        <span ng-show="passwordagain!=userdata.password">*两次密码输入不一致</span>
+                    </span>
+                </p>
+            </div>
+
+            <button type="submit" class="btn btn-primary"
+                ng-disabled="myform.nian.$invalid || myform.yue.$invalid||myform.ri.$invalid||myform.email.$invalid ||myform.age.$invalid ||myform.tell.$invalid ||myform.dizhi.$invalid ||myform.email.$invalid || myform.name.$invalid || myform.password.$invalid || userdata.password != passwordagain">
+                提交<span class="fa fa-arrow-right"></span>
+            </button>
+        </form>
+    </div>
+
+
+</body>
+</html>

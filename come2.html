@@ -35,13 +35,13 @@
 				var ball={
 					x:random(-5,5)+ev.clientX,
 					y:random(-5,5)+ev.clientY+window.pageYOffset,
-					r:random(10,45),
+					r:random(10,25),
 					vx:Math.random()-0.5,
 					vy:Math.random()-0.5,
 					color:colors[random(0,colors.length-1)]
 				};
 				balls.push(ball);
-				if(balls.length>300){
+				if(balls.length>3000){
 					balls.shift();
 				}
 			}
